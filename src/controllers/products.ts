@@ -5,7 +5,7 @@ import Product from '../models/product'
 export const getProducts = async (req: Request, res:Response) =>{
     try {
         const products:IProduct[] = await Product.find()
-        res.status(200).json({
+        return res.status(200).json({
             message:'products found',
             products
         })
@@ -30,7 +30,7 @@ export const getProduct = async (req:Request, res:Response) =>{
     }
 }
 
-export const appProducts = async (req:Request, res:Response) =>{
+export const addProduct = async (req:Request, res:Response) =>{
     try {
         const body:IProduct = req.body
         const product:IProduct = new Product({
