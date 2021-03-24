@@ -111,6 +111,13 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
+"@types/typescript@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/typescript/-/typescript-2.0.0.tgz#c433539c98bae28682b307eaa7a0fd2115b83c28"
+  integrity sha1-xDNTnJi64oaCswfqp6D9IRW4PCg=
+  dependencies:
+    typescript "*"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -1354,6 +1361,11 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typescript@*, typescript@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.2.3.tgz#39062d8019912d43726298f09493d598048c1ce3"
+  integrity sha512-qOcYwxaByStAWrBf4x0fibwZvMRG+r4cQoTjbPtUlrWjBHbmCAww1i448U0GJ+3cNNEtebDteo/cHOR3xJ4wEw==
 
 undefsafe@^2.0.3:
   version "2.0.3"
