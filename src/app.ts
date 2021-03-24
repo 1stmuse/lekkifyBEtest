@@ -16,7 +16,8 @@ mongoose.connect(`${dbUri}`, {
     useUnifiedTopology:true,
     useFindAndModify:false
     })
-    .then(()=> console.log(`Connected to ${dbUri} ... working`))
+    .then(()=> console.log(`Connected ... working`))
+    .catch(err=>console.log(err))
     
     mongoose.Promise = global.Promise
 

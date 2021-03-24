@@ -19,7 +19,8 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "postinstall": "tsc"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
