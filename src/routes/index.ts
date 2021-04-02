@@ -1,5 +1,6 @@
 import {Router} from 'express'
-import {addProduct, getProduct, getProducts} from '../controllers/products'
+import { getProducts, addProduct, getProduct} from '../controllers/products'
+import {cacheAllProducts} from '../redis'
 
 const router:Router = Router()
 

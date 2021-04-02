@@ -18,21 +18,31 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = __importStar(require("express"));
-var cors_1 = __importDefault(require("cors"));
-var dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-var routes_1 = __importDefault(require("./routes"));
-var app = express_1.default();
-app.use(cors_1.default());
-app.use(express_1.json());
-app.use('/api', routes_1.default);
-var port = process.env.PORT || 8080;
-app.listen(port, function () {
-    console.log('connected', port);
-});
-exports.default = app;
+// Update with your config settings.
+require('ts-node/register');
+var dotenv = __importStar(require("dotenv"));
+// import { Config } from 'knex';
+var path = __importStar(require("path"));
+var BASE_PATH = path.join(__dirname, 'src', 'database');
+dotenv.config();
+exports.default = {
+    development: {
+        client: "pg",
+        connection: {
+            database: 'lekkTest',
+            user: 'muse',
+            password: 'Yourmuse1'
+        },
+        pool: {
+            min: 2,
+            max: 10
+        },
+        migrations: {
+            tableName: 'knex_migrations',
+        },
+        seeds: {
+            directory: path.join(BASE_PATH, 'seeds')
+        }
+    },
+};

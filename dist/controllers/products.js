@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,26 +54,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addProduct = exports.getProduct = exports.getProducts = void 0;
-var product_1 = __importDefault(require("../models/product"));
+exports.addProduct = exports.getProducts = void 0;
+var db_1 = __importStar(require("../database/db"));
+var Products = function () { return db_1.default('products'); };
 var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var products, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, product_1.default.find()];
+                return [4 /*yield*/, Products()];
             case 1:
                 products = _a.sent();
-                res.status(200).json({
-                    message: 'products found',
-                    products: products
-                });
-                return [3 /*break*/, 3];
+                db_1.redixClient.setex('allproducts', 86000, JSON.stringify(products));
+                return [2 /*return*/, res.status(200).json({
+                        message: 'products found',
+                        products: products
+                    })];
             case 2:
                 error_1 = _a.sent();
                 throw error_1;
@@ -63,55 +80,41 @@ var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 exports.getProducts = getProducts;
-var getProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, product, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                id = req.params.id;
-                return [4 /*yield*/, product_1.default.findById(id)];
-            case 1:
-                product = _a.sent();
-                if (!product)
-                    res.status(404).json({
-                        message: 'product not found'
-                    });
-                res.status(200).json({
-                    message: 'product found',
-                    product: product
-                });
-                return [3 /*break*/, 3];
-            case 2:
-                error_2 = _a.sent();
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.getProduct = getProduct;
+// export const getProduct = async (req:Request, res:Response) =>{
+//     try {
+//         const id = req.params.id
+//         const product:IProduct | null = await Product.findById(id)
+//         if(!product) res.status(404).json({
+//             message:'product not found'
+//         })
+//         res.status(200).json({
+//             message:'product found', product
+//         })
+//     } catch (error) {
+//     }
+// }
 var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var body, product, newProduct, error_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a, name_1, price, image, newProduct, error_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                body = req.body;
-                product = new product_1.default({
-                    name: body.name,
-                    price: body.price,
-                    image: body.image
-                });
-                return [4 /*yield*/, product.save()];
+                _b.trys.push([0, 2, , 3]);
+                _a = req.body, name_1 = _a.name, price = _a.price, image = _a.image;
+                return [4 /*yield*/, Products().insert({
+                        name: name_1,
+                        price: price,
+                        image: image
+                    }).returning("*")];
             case 1:
-                newProduct = _a.sent();
+                newProduct = _b.sent();
                 res.status(200).json({
                     message: 'added succesfully', product: newProduct
                 });
                 return [3 /*break*/, 3];
             case 2:
-                error_3 = _a.sent();
-                throw error_3;
+                error_2 = _b.sent();
+                console.log(error_2);
+                return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
     });
