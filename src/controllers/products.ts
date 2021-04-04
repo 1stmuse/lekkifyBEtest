@@ -6,24 +6,12 @@ const Products = () => db('products')
 
 export const getProducts = async (req: Request, res:Response) =>{
     try { 
-        redixClient.get('allProducts', async (err, data: any)=>{
-            if(err) throw err
-    
-            if(data !== null){
-                console.log('from redis')
-                res.json({
-                    message:'found ',
-                    products: JSON.parse(data)
-                })
-            }else{
-                const products = await Products()
-                redixClient.setex('allProducts', 86000, JSON.stringify(products))
-                console.log('from db')
-                return res.status(200).json({
-                    message:'products found',
-                    products
-                })
-            }
+
+        const products = await Products()
+        redixClient.setex('allProducts', 86000, JSON.stringify(products))
+        return res.status(200).json({
+            message:'products found',
+            products
         })
     } catch (error) {
         throw error

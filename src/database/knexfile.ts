@@ -24,7 +24,7 @@ export default  {
       tableName: 'knex_migrations',
     },
     seeds:{
-      directory: path.join(BASE_PATH, 'seeds')
+      directory: path.resolve(__dirname, 'seeds')
     }
   },
 
