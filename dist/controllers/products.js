@@ -55,7 +55,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addProduct = exports.getProducts = void 0;
+exports.addProduct = exports.getProduct = exports.getProducts = void 0;
 var db_1 = __importStar(require("../database/db"));
 var Products = function () { return db_1.default('products'); };
 var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -67,7 +67,7 @@ var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, Products()];
             case 1:
                 products = _a.sent();
-                db_1.redixClient.setex('allproducts', 86000, JSON.stringify(products));
+                db_1.redixClient.setex('allProducts', 86000, JSON.stringify(products));
                 return [2 /*return*/, res.status(200).json({
                         message: 'products found',
                         products: products
@@ -80,25 +80,57 @@ var getProducts = function (req, res) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 exports.getProducts = getProducts;
-// export const getProduct = async (req:Request, res:Response) =>{
-//     try {
-//         const id = req.params.id
-//         const product:IProduct | null = await Product.findById(id)
-//         if(!product) res.status(404).json({
-//             message:'product not found'
-//         })
-//         res.status(200).json({
-//             message:'product found', product
-//         })
-//     } catch (error) {
-//     }
-// }
+var getProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id_1;
+    return __generator(this, function (_a) {
+        try {
+            id_1 = req.params.id;
+            db_1.redixClient.get("product-" + id_1, function (err, data) { return __awaiter(void 0, void 0, void 0, function () {
+                var product;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (err)
+                                throw err;
+                            if (!(data !== null)) return [3 /*break*/, 1];
+                            console.log('from redis');
+                            res.json({
+                                message: 'product found',
+                                product: JSON.parse(data)
+                            });
+                            return [3 /*break*/, 3];
+                        case 1: return [4 /*yield*/, Products().select("*")
+                                .where({ id: id_1 })];
+                        case 2:
+                            product = _a.sent();
+                            if (!product)
+                                res.status(404).json({
+                                    message: 'product not found'
+                                });
+                            res.status(200).json({
+                                message: 'product found',
+                                product: product
+                            });
+                            _a.label = 3;
+                        case 3: return [2 /*return*/];
+                    }
+                });
+            }); });
+        }
+        catch (error) {
+            throw error;
+        }
+        return [2 /*return*/];
+    });
+}); };
+exports.getProduct = getProduct;
 var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, name_1, price, image, newProduct, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _a, name_1, price, image, products, error_2;
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                _b.trys.push([0, 2, , 3]);
+                _c.trys.push([0, 2, , 3]);
                 _a = req.body, name_1 = _a.name, price = _a.price, image = _a.image;
                 return [4 /*yield*/, Products().insert({
                         name: name_1,
@@ -106,13 +138,14 @@ var addProduct = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                         image: image
                     }).returning("*")];
             case 1:
-                newProduct = _b.sent();
+                products = _c.sent();
+                db_1.redixClient.setex("product-" + ((_b = products[0]) === null || _b === void 0 ? void 0 : _b.id), 84000, JSON.stringify(products[0]));
                 res.status(200).json({
-                    message: 'added succesfully', product: newProduct
+                    message: 'added succesfully', product: products
                 });
                 return [3 /*break*/, 3];
             case 2:
-                error_2 = _b.sent();
+                error_2 = _c.sent();
                 console.log(error_2);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];

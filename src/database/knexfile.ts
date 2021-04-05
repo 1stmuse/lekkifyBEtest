@@ -24,6 +24,7 @@ export default  {
       tableName: 'knex_migrations',
     },
     seeds:{
+      tableName: 'knex_seeds',
       directory: path.resolve(__dirname, 'seeds')
     }
   },
